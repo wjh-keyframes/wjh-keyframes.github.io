@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Online, unsupervised keyframe detection for robot demonstrations from robot motion and robot-conditioned visual surprise.">
+  <meta name="keywords" content="keyframe detection, robot demonstrations, event boundary detection, unsupervised, self-model, HMM">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>What Just Happened? Online Unsupervised Keyframe Detection from Robot Motion and Visual Surprise</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">What Just Happened? Online Unsupervised Keyframe Detection from Robot Motion and Visual Surprise</h1>
+          <!-- TODO: replace with the author list once the paper is de-anonymised. -->
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Anonymous Authors</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Under review at Transactions on Machine Learning Research (TMLR)</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. TODO: set to the OpenReview / arXiv PDF. -->
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- arXiv / OpenReview Link. TODO. -->
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="#"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="./static/images/teaser.png" class="figure-img"
+           alt="Overview: an unlabelled episode mixes robot and world events; a robot stream detects motion completion and a world stream detects unexplained scene changes, giving sparse keyframes. A radar chart compares F1 on eight settings.">
+      <h2 class="subtitle has-text-centered">
+        Robot demonstrations mix two kinds of events: the robot finishing a motion, and changes in the world
+        around it. <span class="dnerf">What Just Happened?</span> detects both, online and without keyframe labels.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Identifying meaningful temporal boundaries in robot demonstrations is essential for automatically
+            curating trajectories into informative keyframes. Existing unsupervised approaches predominantly rely
+            on robot motion or visual changes in isolation, making it difficult to detect keyframes arising from
+            both robot actions and changes in the surrounding environment.
+          </p>
+          <p>
+            We present an online, unsupervised framework for keyframe detection that accounts for both sources of
+            event evidence. Our method combines a proprioceptive stream that detects the completion of robot arm
+            and gripper motions with a visual stream that identifies scene changes unexplained by the robot's
+            expected visual effects. Specifically, a robot-conditioned recurrent self-model predicts visual
+            feature changes associated with robot motion, allowing unexpected changes to serve as additional
+            keyframe evidence. The resulting event proposals are merged into a unified set of keyframe timestamps.
+            Both event models are learned without keyframe annotations, while shared detection parameters are
+            selected on a subset of validation benchmarks and applied unchanged across all eight evaluation settings.
+          </p>
+          <p>
+            Across eight simulated and real-robot evaluation settings, our method achieves a mean boundary-detection
+            F1 of 0.750, outperforming the strongest external baseline (0.639) under a uniform &plusmn;1-second
+            evaluation tolerance. Across five settings containing both robot- and world-associated events, fusion
+            improves mean F1 from 0.512 with proprioception alone to 0.798, compared with 0.663 for the strongest
+            external baseline. Further ablations show that robot-conditioned visual prediction improves world-event
+            detection over raw visual feature changes on all five evaluated settings.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Highlights. -->
+    <div class="columns is-centered has-text-centered highlights">
+      <div class="column">
+        <p class="highlight-number">0.750</p>
+        <p class="highlight-label">mean F1 over eight settings<br>(strongest baseline 0.639)</p>
+      </div>
+      <div class="column">
+        <p class="highlight-number">0.512 &rarr; 0.798</p>
+        <p class="highlight-label">mean F1 on robot-and-world settings,<br>proprioception alone &rarr; fused</p>
+      </div>
+      <div class="column">
+        <p class="highlight-number">4.49 ms</p>
+        <p class="highlight-label">per frame for the full online<br>detector (223 frames/s)</p>
+      </div>
+    </div>
+    <!--/ Highlights. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <!-- Method. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Method</h2>
+        <div class="content has-text-justified">
+          <p>
+            Visual change alone conflates the robot's own motion with independent changes in the scene, while
+            proprioception sees only the robot. We therefore separate two sources of keyframe evidence and
+            fit both without keyframe annotations.
+          </p>
+        </div>
+        <img src="./static/images/method.png" class="figure-img"
+             alt="Method overview: robot stream with per-part HMMs, world stream with DINOv3 patch change and a visual self-model, and priority-based attribution into keyframes.">
+        <div class="content has-text-justified">
+          <ul>
+            <li>
+              <b>Robot stream <span class="stream-r">&#8475;</span>.</b> Each arm and gripper has a two-state
+              still/moving Hidden Markov Model fitted on unlabelled motion. A moving-to-still transition marks a
+              completed motion. This replaces hand-tuned velocity thresholds and debouncing rules.
+            </li>
+            <li>
+              <b>World stream <span class="stream-e">&#8496;</span>.</b> A lightweight recurrent self-model predicts
+              the patchwise DINOv3 feature change that the robot's own pose and motion should cause. Change beyond
+              that prediction is <i>visual surprise</i>, which reveals scene changes even while the robot is moving.
+            </li>
+            <li>
+              <b>Fusion and attribution.</b> Gripper events take priority over arm events, then world events; a
+              later proposal within a short window of a kept one is dropped. The output is a sparse, time-ordered
+              set of keyframes, each tagged as a robot or world event.
+            </li>
+          </ul>
+          <p>
+            Detection is causal: no robot masks, camera calibration or access to the full trajectory are needed.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Method. -->
+
+    <!-- Results. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Results</h2>
+        <div class="content has-text-justified">
+          <p>
+            Keyframe-detection F1 at &plusmn;1&nbsp;s on eight settings: five whose reference keyframes include
+            both robot and world events (including two physical Franka tasks), and three with robot events only. Our online detector has the best mean F1 and leads on every benchmark with
+            world events. On the robot-only settings the robot stream alone is strongest, and AWE is better than
+            the fused detector on RoboCasa.
+          </p>
+        </div>
+        <div class="table-container">
+          <table class="table is-narrow is-hoverable results-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th colspan="5" class="group-world">Robot + world events</th>
+                <th colspan="3" class="group-robot">Robot events only</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th>Method</th>
+                <th>RoboMME</th><th>MIKASA</th><th>HABIT</th><th>find_cube</th><th>sugar_cube</th>
+                <th>RoboCasa</th><th>RMBench</th><th>REASSEMBLE</th>
+                <th>Mean(8)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>AWE (offline)</td><td>.792</td><td>.596</td><td>.558</td><td>.231</td><td>.443</td><td><b>.620</b></td><td>.758</td><td>.505</td><td>.563</td></tr>
+              <tr><td>VQ-Memory</td><td>.583</td><td>.331</td><td>.389</td><td>.041</td><td>.070</td><td>.179</td><td>.569</td><td>.151</td><td>.289</td></tr>
+              <tr><td>CoSeg (offline)</td><td>.820</td><td>.587</td><td>.664</td><td>.709</td><td>.535</td><td>.555</td><td>.818</td><td>.427</td><td>.639</td></tr>
+              <tr><td>Worth Remembering</td><td>.682</td><td>.454</td><td>.385</td><td>.615</td><td>.519</td><td>.476</td><td>.614</td><td>.380</td><td>.516</td></tr>
+              <tr><td>KEMO</td><td>.769</td><td>.470</td><td>.464</td><td>.527</td><td>.506</td><td>.551</td><td>.684</td><td>.391</td><td>.545</td></tr>
+              <tr class="ours-part"><td>Ours (&#8475; only)</td><td>.748</td><td>.511</td><td>.622</td><td>.195</td><td>.484</td><td>.650</td><td>.915</td><td>.586</td><td>.589</td></tr>
+              <tr class="ours-part"><td>Ours (&#8496; only)</td><td>.676</td><td>.621</td><td>.582</td><td>.803</td><td>.653</td><td>.453</td><td>.634</td><td>.357</td><td>.597</td></tr>
+              <tr class="ours"><td>Ours (&#8475; &oplus; &#8496;)</td><td><b>.885</b></td><td><b>.703</b></td><td><b>.718</b></td><td><b>.876</b></td><td><b>.810</b></td><td>.590</td><td><b>.912</b></td><td><b>.507</b></td><td><b>.750</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Bold: best fused or external method per column. AWE and CoSeg require the complete demonstration (offline).</p>
+      </div>
+    </div>
+    <!--/ Results. -->
+
+    <!-- Qualitative. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 class="title is-4">World events that robot motion cannot reveal</h3>
+        <div class="content has-text-justified">
+          <p>
+            Cue cubes appear and vanish in MIKASA-Robo, a cube is shown, hidden and shuffled among cups in the
+            Franka <i>find_cube</i> task, and a person places crumpled paper on the table in HABIT. None of these
+            coincides with a completed robot motion. Our detector recovers all three, while the proprioceptive and
+            kinematics-driven baselines miss them.
+          </p>
+        </div>
+        <img src="./static/images/qualitative.png" class="figure-img"
+             alt="Qualitative examples on MIKASA-Robo, find_cube and HABIT: our method detects each world event; most baselines miss them.">
+      </div>
+    </div>
+    <!--/ Qualitative. -->
+
+    <!-- Complementarity. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 class="title is-4">Why separate robot and world events?</h3>
+        <div class="content has-text-justified">
+          <p>
+            Combining both streams improves F1 on all five settings with robot and world events. On MIKASA-Robo,
+            recall of world events rises from 17.0% with the robot stream alone to 69.7% after fusion; on the two
+            physical Franka tasks, the robot stream finds none of the annotated world events, while the fused
+            detector recovers 79&ndash;94% of them. Discounting the change expected from the robot's own motion also
+            improves world-event detection over raw DINOv3 feature change on all five settings.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Complementarity. -->
+
+    <!-- Tolerance and latency. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h3 class="title is-4">Temporal localization and online efficiency</h3>
+        <div class="content has-text-justified">
+          <p>
+            Rescoring the same detections at tolerances from &plusmn;0.25&nbsp;s to &plusmn;1&nbsp;s, our detector
+            leads the external baselines on the robot-and-world settings at nearly every tolerance. The complete
+            detector, including DINOv3 and the recurrent self-model, processes a frame in 4.49&nbsp;ms, compared
+            with 2.86&nbsp;ms for KEMO and 135.9&nbsp;ms for Worth Remembering.
+          </p>
+        </div>
+        <img src="./static/images/tolerance_latency.png" class="figure-img"
+             alt="(a) Boundary F1 versus matching tolerance on eight settings; (b) mean F1 versus per-frame latency.">
+      </div>
+    </div>
+    <!--/ Tolerance and latency. -->
+
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <!-- TODO: update authors and venue after the review. -->
+    <pre><code>@article{anonymous2026whatjusthappened,
+  author    = {Anonymous},
+  title     = {What Just Happened? Online Unsupervised Keyframe Detection from Robot Motion and Visual Surprise},
+  journal   = {Under review at Transactions on Machine Learning Research},
+  year      = {2026},
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link" href="#">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="#" class="external-link">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            It is adapted from the <a href="https://github.com/nerfies/nerfies.github.io">source code</a> of the
+            <a href="https://nerfies.github.io">Nerfies</a> project page.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
